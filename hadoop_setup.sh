@@ -13,7 +13,6 @@ HADOOP_VERSION=3.4.1
 HADOOP_HOME=/usr/local/hadoop
 HADOOP_USER=hduser
 
-
 if command -v java >/dev/null 2>&1; then
     #INSTALLED_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
     INSTALLED_VERSION=$(java -version 2>&1 | java -version 2>&1 | grep "11")
@@ -168,10 +167,8 @@ if [ -f "hadoop-3.4.1.tar.gz" ]; then
         echo "Extraction failed. Exiting..."
         exit 1
     fi
-   #rm hadoop-3.4.1.tar.gz
+   rm hadoop-3.4.1.tar.gz
 fi
-
-#*****
 
 # Move extracted Hadoop to HADOOP_HOME
 if [ -d "hadoop-3.4.1" ]; then
@@ -186,14 +183,6 @@ else
     exit 1
 fi
 
-
-
-
-
-
-
-#BASH_FILE="/home/hduser/.bashrc"
-#echo "Target: $BASH_FILE"
 # Check if the Hadoop section is already in the .bashrc file
 if grep -qxF '#HADOOP VARIABLES START' /home/hduser/.bashrc; then
     echo "Hadoop environment variables are already present in .bashrc."
@@ -243,8 +232,6 @@ else
     echo "JAVA_HOME not found. Adding..."
     echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> "/usr/local/hadoop/etc/hadoop/hadoop-env.sh"
 fi
-
-
 
 cat <<EOL > "/usr/local/hadoop/etc/hadoop/core-site.xml" 
 <?xml version="1.0"?>
@@ -329,13 +316,4 @@ if [ ! -d "/usr/local/hadoop_store/hdfs/namenode/current" ]; then
 else
     echo "Namenode already formatted. Skipping."
 fi
-
-
-
-
-
-
-
-
-
 
