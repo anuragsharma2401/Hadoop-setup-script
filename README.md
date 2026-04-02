@@ -18,6 +18,6 @@ This script automates the installation and configuration of **Apache Hadoop 3.4.
 You can run this script directly from GitHub or download it manually:
 
 ```bash
-wget https://github.com/anuragsharma2401/Hadoop-setup-script.git
+wget https://raw.githubusercontent.com/anuragsharma2401/Hadoop-setup-script/refs/heads/main/hadoop_setup.sh
 chmod +x hadoop_setup.sh
 sudo ./hadoop_setup.sh
