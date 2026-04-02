@@ -15,7 +15,7 @@ This script automates the installation and configuration of **Apache Hadoop 3.4.
 - `sudo` privileges.
 
 ## 📥 Installation
-You can run this script directly from GitHub or download it manually:
+The script can be downloaded manually or executed directly on your local machine using a raw GitHub link:
 
 ```bash
 wget https://raw.githubusercontent.com/anuragsharma2401/Hadoop-setup-script/refs/heads/main/hadoop_setup.sh
