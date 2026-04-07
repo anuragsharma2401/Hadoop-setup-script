@@ -2,39 +2,38 @@
 
 set -e
 set -o pipefail
-trap 'echo "Error at Line $LINENO. Fix and return."; exit 1' ERR
+trap 'echo "Error at Line $LINENO: $BASH_COMMAND failed. Fix and return."; exit 1' ERR
 
 if [ "$EUID" -ne 0 ]; then
    echo "Please run this script by a sudo user."
    exit 1 
 fi
 
+if command -v pig >/dev/null 2>&1 && pig -version >/dev/null 2>&1; then
+    echo "Pig is already installed and working."
+    pig -version
+    exit 0
+fi    
+
 su - hduser <<'EOF'
 
 if [ ! -f "pig-0.16.0.tar.gz" ]; then
     echo "Downloading Pig..."
     wget https://dlcdn.apache.org/pig/pig-0.16.0/pig-0.16.0.tar.gz
-    if [ $? -ne 0 ]; then
-        echo "Download failed. Exiting..."
-        exit 1
-    fi
+fi
+
+if [ ! -d "pig-0.16.0" ]; then
     echo "Extracting Pig..."
     tar -xzf pig-0.16.0.tar.gz
-    if [ $? -ne 0 ]; then
-        echo "Extraction failed. Exiting..."
-        exit 1
-    fi
+    
     rm pig-0.16.0.tar.gz
 fi
 
 if [ -d "pig-0.16.0" ]; then
     mkdir -p /usr/local/pignew
     echo "Moving Pig to /usr/local/pignew..."
-    mv pig-0.16.0* /usr/local/pignew
-    if [ $? -ne 0 ]; then
-        echo "Failed to move Pig to /usr/local/pignew. Exiting..."
-        exit 1
-    fi
+    mv pig-0.16.0/* /usr/local/pignew
+    
 else
     echo "Pig directory not found after extraction. Exiting..."
     exit 1
@@ -55,12 +54,7 @@ export PIG_CONF_DIR=\$PIG_HOME/conf
 export PIG_CLASSPATH=\$PIG_CONF_DIR
 #PIG VARIABLES END
 EOL
-    if [ $? -eq 0 ]; then
-        echo ".bashrc file updated successfully."
-    else
-        echo "Failed to update .bashrc. Exiting..."
-        exit 1
-    fi
+    echo ".bashrc file updated successfully."
 fi
 
 # Verify if the .bashrc file has been updated successfully
@@ -72,8 +66,11 @@ else
     exit 1
 fi
 
-echo "Run: source /home/hduser/.bashrc"
+echo "Run: source ~/.bashrc"
+
+pig -version
 
 EOF
 
 echo "Pig installed and setup successfully..."
+echo ""
