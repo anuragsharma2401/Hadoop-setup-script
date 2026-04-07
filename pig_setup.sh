@@ -9,7 +9,7 @@ if [ "$EUID" -ne 0 ]; then
    exit 1 
 fi
 
-su - $HADOOP_USER <<'EOF'
+su - hduser <<'EOF'
 
 if [ ! -f "pig-0.16.0.tar.gz" ]; then
     echo "Downloading Pig..."
@@ -18,7 +18,7 @@ if [ ! -f "pig-0.16.0.tar.gz" ]; then
         echo "Download failed. Exiting..."
         exit 1
     fi
-    echo "Extracting Hadoop..."
+    echo "Extracting Pig..."
     tar -xzf pig-0.16.0.tar.gz
     if [ $? -ne 0 ]; then
         echo "Extraction failed. Exiting..."
@@ -30,18 +30,18 @@ fi
 if [ -d "pig-0.16.0" ]; then
     mkdir -p /usr/local/pignew
     echo "Moving Pig to /usr/local/pignew..."
-    mv hadoop-3.4.1/* /usr/local/pignew
+    mv pig-0.16.0* /usr/local/pignew
     if [ $? -ne 0 ]; then
-        echo "Failed to move Hadoop to HADOOP_HOME. Exiting..."
+        echo "Failed to move Pig to /usr/local/pignew. Exiting..."
         exit 1
     fi
 else
-    echo "Hadoop directory not found after extraction. Exiting..."
+    echo "Pig directory not found after extraction. Exiting..."
     exit 1
 fi
 
 # Check if the Pig section is already in the .bashrc file
-if grep -qxF '#PIG VARIABLES' /home/hduser/.bashrc; then
+if grep -q '#PIG VARIABLES' /home/hduser/.bashrc; then
     echo "Pig environment variables are already present in .bashrc."
 else 
     # If the marker is not found, append the Pig variables to the .bashrc file
@@ -65,14 +65,14 @@ fi
 
 # Verify if the .bashrc file has been updated successfully
 echo "Verifying the update..."
-if grep -qxF '#PIG VARIABLES' /home/hduser/.bashrc; then
+if grep -q '#PIG VARIABLES' /home/hduser/.bashrc; then
     echo "Pig environment variables are set in .bashrc."
 else
     echo "Pig environment variables were not added to .bashrc. Exiting..."
     exit 1
 fi
 
-source /home/hduser/.bashrc
+echo "Run: source /home/hduser/.bashrc"
 
 EOF
 
