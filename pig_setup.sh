@@ -66,11 +66,28 @@ else
     exit 1
 fi
 
-echo "Run: source ~/.bashrc"
-
 pig -version
 
 EOF
 
-echo "Pig installed and setup successfully..."
+source /home/hduser/.bashrc
+
+clear
+
+echo "==================================================================================="
+echo "                         Pig Setup Completed Successfully                          "
+echo "==================================================================================="
 echo ""
+
+echo "Next Steps:"
+echo "1. Switch to hduser:"
+echo "   su - hduser"
+echo ""
+echo "2. (If Hadoop is not running) start Hadoop:"
+echo "   start-dfs.sh"
+echo "   start-yarn.sh"
+echo ""
+echo "3. Run Pig:"
+echo "   pig"
+echo ""
+echo "==================================================================================="
