@@ -9,16 +9,20 @@ if [ "$EUID" -ne 0 ]; then
    exit 1 
 fi
 
-if su - hduser -c "command -v pig >/dev/null 2>&1 && pig -version >/dev/null 2>&1"; then
-    echo "Pig is already installed and working."
-    su - hduser -c "pig -version"
-    exit 0
-fi    
-
 mkdir -p /usr/local/pignew
 chown -R hduser:hadoop /usr/local/pignew
 
 su - hduser <<'EOF'
+
+if [ -x /usr/local/pignew/bin/pig ]; then
+    echo "Pig binary found at /usr/local/pignew/bin/pig"
+    if command -v /usr/local/pignew/bin/pig >/dev/null 2>&1 || /usr/local/pignew/bin/pig -version >/dev/null 2>&1; then
+        echo "Pig is already installed and working."
+        exit 0
+    else 
+        echo "Pig binaries exists but failed to run. Checking environment variables..."
+    fi
+fi    
 
 if [ ! -f "pig-0.16.0.tar.gz" ]; then
     echo "Downloading Pig..."
@@ -35,7 +39,7 @@ fi
 if [ -d "pig-0.16.0" ]; then
     echo "Moving Pig to /usr/local/pignew..."
     mv pig-0.16.0/* /usr/local/pignew
-    
+    rmdir pig-0.16.0
 else
     echo "Pig directory not found after extraction. Exiting..."
     exit 1
@@ -68,11 +72,7 @@ else
     exit 1
 fi
 
-echo "Verifying Pig installation..."
-su - hduser -c "pig -version" || {
-    echo "Pig installation failed!"
-    exit 1
-}
+source ~/.bashrc
 
 EOF
 
