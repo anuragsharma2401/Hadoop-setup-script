@@ -15,6 +15,9 @@ if su - hduser -c "command -v pig >/dev/null 2>&1 && pig -version >/dev/null 2>&
     exit 0
 fi    
 
+mkdir -p /usr/local/pignew
+chown -R hduser:hadoop /usr/local/pignew
+
 su - hduser <<'EOF'
 
 if [ ! -f "pig-0.16.0.tar.gz" ]; then
@@ -30,7 +33,6 @@ if [ ! -d "pig-0.16.0" ]; then
 fi
 
 if [ -d "pig-0.16.0" ]; then
-    mkdir -p /usr/local/pignew
     echo "Moving Pig to /usr/local/pignew..."
     mv pig-0.16.0/* /usr/local/pignew
     
