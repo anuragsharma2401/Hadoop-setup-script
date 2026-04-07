@@ -2,16 +2,16 @@
 
 set -e
 set -o pipefail
-trap 'echo "Error at Line $LINENO: $BASH_COMMAND failed. Fix and return."; exit 1' ERR
+trap 'echo "Error at Line $LINENO. Fix and return."; exit 1' ERR
 
 if [ "$EUID" -ne 0 ]; then
    echo "Please run this script by a sudo user."
    exit 1 
 fi
 
-if command -v pig >/dev/null 2>&1 && pig -version >/dev/null 2>&1; then
+if su - hduser -c "command -v pig >/dev/null 2>&1 && pig -version >/dev/null 2>&1"; then
     echo "Pig is already installed and working."
-    pig -version
+    su - hduser -c "pig -version"
     exit 0
 fi    
 
@@ -66,17 +66,17 @@ else
     exit 1
 fi
 
-pig -version
+echo "Verifying Pig installation..."
+su - hduser -c "pig -version" || {
+    echo "Pig installation failed!"
+    exit 1
+}
 
 EOF
 
-source /home/hduser/.bashrc
-
-clear
-
-echo "==================================================================================="
-echo "                         Pig Setup Completed Successfully                          "
-echo "==================================================================================="
+echo "=========================================="
+echo "     Pig Setup Completed Successfully     "
+echo "=========================================="
 echo ""
 
 echo "Next Steps:"
