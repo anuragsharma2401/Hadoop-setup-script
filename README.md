@@ -49,9 +49,9 @@ chmod +x hadoop_setup.sh
 sudo ./hadoop_setup.sh
 ```
 
-### Setup Hadoop
+### Setup Apache Pig 
 
 ```bash
-wget https://raw.githubusercontent.com/anuragsharma2401/Hadoop-setup-script/refs/heads/main/hadoop_setup.sh
-chmod +x hadoop_setup.sh
-sudo ./hadoop_setup.sh
+wget https://raw.githubusercontent.com/anuragsharma2401/Hadoop-setup-script/refs/heads/main/pig_setup.sh
+chmod +x pig_setup.sh
+sudo ./pig_setup.sh
