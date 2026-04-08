@@ -83,7 +83,7 @@ echo ""
 
 echo "Next Steps:"
 echo "1. Switch to hduser:"
-echo "   su - hduser"
+echo "   su hduser"
 echo ""
 echo "2. (If Hadoop is not running) start Hadoop:"
 echo "   start-dfs.sh"
